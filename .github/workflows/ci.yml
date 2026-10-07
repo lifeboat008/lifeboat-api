@@ -25,5 +25,6 @@ jobs:
         with:
           go-version-file: lifeboat-api/go.mod
       - run: go work init ./lifeboat-protocol ./lifeboat-ledger ./lifeboat-api
+      - run: go work edit -replace=github.com/lifeboat008/lifeboat-protocol=./lifeboat-protocol -replace=github.com/lifeboat008/lifeboat-ledger=./lifeboat-ledger
       - run: go test ./lifeboat-api/...
       - run: go vet ./lifeboat-api/...
