@@ -1,3 +1,5 @@
+<p align="center"><img src="assets/logo.svg" alt="Lifeboat logo" width="112"></p>
+
 # lifeboat-api
 
 Go service that runs Lifeboat's sponsor, claim, review, and payment workflow.
