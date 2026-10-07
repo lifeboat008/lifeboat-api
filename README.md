@@ -22,4 +22,4 @@ An approved claim reserves budget atomically. The API persists a signed testnet 
 
 Go 1.26 and access to tagged private `lifeboat-protocol` and `lifeboat-ledger` modules are required to build from source.
 
-Product PRD and architecture live in the parent `lifeboat/docs` folder in the local workspace.
+The shared [product requirements](product/docs/PRD.md), architecture, validation record, and vector brand files are versioned in `product/`. The parent `lifeboat` folder also keeps a local workspace copy.
