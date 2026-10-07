@@ -13,6 +13,7 @@ import (
 
 	ledger "github.com/lifeboat008/lifeboat-ledger"
 	protocol "github.com/lifeboat008/lifeboat-protocol"
+	"github.com/stellar/go-stellar-sdk/keypair"
 	_ "modernc.org/sqlite"
 )
 
@@ -75,6 +76,15 @@ func validRole(role string) bool {
 	switch role {
 	case "steward", "sponsor", "maintainer", "reviewer", "payer", "github":
 		return true
+	}
+	return false
+}
+
+func (s *Server) hasActor(id, role string) bool {
+	for _, actor := range s.actors {
+		if actor.ID == id && actor.Role == role {
+			return true
+		}
 	}
 	return false
 }
@@ -183,7 +193,7 @@ func (s *Server) createPlan(w http.ResponseWriter, r *http.Request) {
 	if !decode(w, r, &plan) {
 		return
 	}
-	if plan.SponsorID != actor.ID || plan.Validate(s.now()) != nil {
+	if plan.SponsorID != actor.ID || !s.hasActor(plan.ReviewerID, "reviewer") || plan.Validate(s.now()) != nil {
 		problem(w, 400, "invalid or unauthorized plan")
 		return
 	}
@@ -276,7 +286,8 @@ func (s *Server) createClaim(w http.ResponseWriter, r *http.Request) {
 	var evidence protocol.Evidence
 	_ = json.Unmarshal(planData, &plan)
 	_ = json.Unmarshal(evidenceData, &evidence)
-	if claim.MaintainerID != actor.ID || claim.State != protocol.ClaimSubmitted || claim.Validate(plan, s.now()) != nil || evidence.ProjectID != claim.ProjectID || evidence.Kind != claim.WorkType {
+	_, addressErr := keypair.ParseAddress(claim.DestinationAccount)
+	if claim.MaintainerID != actor.ID || claim.State != protocol.ClaimSubmitted || claim.Validate(plan, s.now()) != nil || evidence.ProjectID != claim.ProjectID || evidence.Kind != claim.WorkType || addressErr != nil {
 		problem(w, 400, "invalid or unauthorized claim")
 		return
 	}
@@ -546,7 +557,7 @@ func (s *Server) createRescueTask(w http.ResponseWriter, r *http.Request) {
 	var project protocol.Project
 	_ = json.Unmarshal(data, &project)
 	task.OpenedAt = s.now().UTC()
-	if task.StewardID != actor.ID || task.Validate(project) != nil {
+	if task.StewardID != actor.ID || !s.hasActor(task.ReviewerID, "reviewer") || task.Validate(project) != nil {
 		problem(w, 400, "invalid or unauthorized rescue task")
 		return
 	}

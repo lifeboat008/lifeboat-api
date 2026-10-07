@@ -11,6 +11,7 @@ import (
 
 	ledger "github.com/lifeboat008/lifeboat-ledger"
 	protocol "github.com/lifeboat008/lifeboat-protocol"
+	"github.com/stellar/go-stellar-sdk/keypair"
 )
 
 type fakeGateway struct {
@@ -80,7 +81,11 @@ func TestClaimApprovalPaymentAndRetry(t *testing.T) {
 	if got := call("POST", "/v1/evidence", actors[5].Token, "", evidence); got != 409 {
 		t.Fatalf("duplicate evidence: %d", got)
 	}
-	claim := protocol.Claim{ID: "c1", ProjectID: "p1", PlanID: "plan1", MaintainerID: "worker", EvidenceID: "ev1", WorkType: "merged_pr", Summary: "Fixed dependency update", AmountStroops: 5_000_000, DestinationAccount: "GTEST", State: protocol.ClaimSubmitted}
+	destination, err := keypair.Random()
+	if err != nil {
+		t.Fatal(err)
+	}
+	claim := protocol.Claim{ID: "c1", ProjectID: "p1", PlanID: "plan1", MaintainerID: "worker", EvidenceID: "ev1", WorkType: "merged_pr", Summary: "Fixed dependency update", AmountStroops: 5_000_000, DestinationAccount: destination.Address(), State: protocol.ClaimSubmitted}
 	if got := call("POST", "/v1/claims", actors[2].Token, "", claim); got != 201 {
 		t.Fatalf("claim: %d", got)
 	}
@@ -99,6 +104,27 @@ func TestClaimApprovalPaymentAndRetry(t *testing.T) {
 	}
 	if gateway.submissions != 1 {
 		t.Fatalf("submissions = %d", gateway.submissions)
+	}
+	evidence2 := evidence
+	evidence2.ID = "ev2"
+	evidence2.DeliveryID = "delivery2"
+	if got := call("POST", "/v1/evidence", actors[5].Token, "", evidence2); got != 201 {
+		t.Fatalf("second evidence: %d", got)
+	}
+	claim2 := claim
+	claim2.ID = "c2"
+	claim2.EvidenceID = "ev2"
+	claim2.AmountStroops = 6_000_000
+	if got := call("POST", "/v1/claims", actors[2].Token, "", claim2); got != 201 {
+		t.Fatalf("second claim: %d", got)
+	}
+	decision2 := decision
+	decision2.ClaimID = "c2"
+	if got := call("POST", "/v1/claims/c2/decision", actors[3].Token, "", decision2); got != 409 {
+		t.Fatalf("over-budget approval: %d", got)
+	}
+	if got := call("POST", "/v1/claims/c2/payment", actors[4].Token, "other-unique-key-123", nil); got != 409 {
+		t.Fatalf("unapproved payment: %d", got)
 	}
 	var budget protocol.Budget
 	if err := s.db.QueryRow(`SELECT total,reserved,paid FROM plans WHERE id='plan1'`).Scan(&budget.TotalStroops, &budget.ReservedStroops, &budget.PaidStroops); err != nil {
