@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.2 — 2026-10-07
+
+- Added an opt-in end-to-end test that confirms a real Stellar testnet payout and idempotent API retry.
+
 ## v0.1.1 — 2026-10-07
 
 - Validate configured reviewers and Stellar payout addresses before claims reserve budget.
