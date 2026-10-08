@@ -7,24 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: lifeboat-api
-      - uses: actions/checkout@v4
-        with:
-          repository: lifeboat008/lifeboat-protocol
-          ref: v0.1.0
-          path: lifeboat-protocol
-          token: ${{ secrets.MODULES_READ_TOKEN }}
-      - uses: actions/checkout@v4
-        with:
-          repository: lifeboat008/lifeboat-ledger
-          ref: v0.1.0
-          path: lifeboat-ledger
-          token: ${{ secrets.MODULES_READ_TOKEN }}
       - uses: actions/setup-go@v5
         with:
-          go-version-file: lifeboat-api/go.mod
-      - run: go work init ./lifeboat-api
-      - run: go work edit -replace=github.com/lifeboat008/lifeboat-protocol=./lifeboat-protocol -replace=github.com/lifeboat008/lifeboat-ledger=./lifeboat-ledger
-      - run: go test ./lifeboat-api/...
-      - run: go vet ./lifeboat-api/...
+          go-version-file: go.mod
+      - run: go test ./...
+      - run: go vet ./...

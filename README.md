@@ -2,6 +2,8 @@
 
 # lifeboat-api
 
+[![Go CI](https://github.com/lifeboat008/lifeboat-api/actions/workflows/ci.yml/badge.svg)](https://github.com/lifeboat008/lifeboat-api/actions/workflows/ci.yml)
+
 Go service that runs Lifeboat's sponsor, claim, review, and payment workflow.
 
 ## Owns
@@ -22,12 +24,16 @@ All `/v1` routes require `Authorization: Bearer <token>`. The workflow is `POST 
 
 An approved claim reserves budget atomically. The API persists a signed testnet transaction before submission. A retry first looks up its hash and otherwise submits the same envelope. It only settles the reserved budget after a confirmed matching receipt. GitHub evidence alone never approves a claim. This pilot records sponsor commitments; it does not receive sponsor deposits or verify treasury funding. Do not use it for real funds until custody, payout asset, and legal operations are defined.
 
-Go 1.26 and access to tagged private `lifeboat-protocol` and `lifeboat-ledger` modules are required to build from source.
+Go 1.26.3 or newer is required. The tagged `lifeboat-protocol` and `lifeboat-ledger` modules are public, so no module token is needed. Run `go test ./...` and `go vet ./...` before opening a pull request.
 
 The shared [product requirements](product/docs/PRD.md), architecture, validation record, and vector brand files are versioned in `product/`. The parent `lifeboat` folder also keeps a local workspace copy.
+
+The [documentation index](product/docs/README.md), [Wave readiness record](product/docs/WAVE_READINESS.md), and [submission packet](product/docs/SUBMISSION.md) distinguish validated testnet behavior from unfinished pilot and program steps.
 
 [Wave application steps and six contributor issues](product/docs/WAVE.md) are documented separately. A Wave application does not make the testnet pilot ready for real sponsor funds.
 
 ## Contributing and security
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for pull requests, [SECURITY.md](SECURITY.md) for private vulnerability reports, and [LICENSE](LICENSE) for MIT terms.
+
+Maintainers: [lifeboat008](https://github.com/lifeboat008). Discuss public work in [issues](https://github.com/lifeboat008/lifeboat-api/issues); report vulnerabilities privately as described in SECURITY.md. This pilot has not had a formal security audit.
