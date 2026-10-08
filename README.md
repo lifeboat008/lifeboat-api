@@ -26,6 +26,8 @@ Go 1.26 and access to tagged private `lifeboat-protocol` and `lifeboat-ledger` m
 
 The shared [product requirements](product/docs/PRD.md), architecture, validation record, and vector brand files are versioned in `product/`. The parent `lifeboat` folder also keeps a local workspace copy.
 
+[Wave application steps and six contributor issues](product/docs/WAVE.md) are documented separately. A Wave application does not make the testnet pilot ready for real sponsor funds.
+
 ## Contributing and security
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for pull requests, [SECURITY.md](SECURITY.md) for private vulnerability reports, and [LICENSE](LICENSE) for MIT terms.
