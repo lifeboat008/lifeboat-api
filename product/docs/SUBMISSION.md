@@ -25,7 +25,7 @@ Six scoped issues are open. Protocol: [disputes and reviewer conflicts](https://
 
 | Item | Current evidence | Submission status |
 | --- | --- | --- |
-| Source and setup | Four public repositories, MIT licenses, READMEs, CI, and [product docs](README.md) | Available |
+| Source and setup | Four public repositories, MIT licenses, READMEs, CI, [product docs](README.md), and tagged releases ([protocol](https://github.com/lifeboat008/lifeboat-protocol/releases/tag/v0.1.1), [ledger](https://github.com/lifeboat008/lifeboat-ledger/releases/tag/v0.1.1), [API](https://github.com/lifeboat008/lifeboat-api/releases/tag/v0.1.3), [GitHub adapter](https://github.com/lifeboat008/lifeboat-github/releases/tag/v0.1.1)) | Available |
 | Live Stellar proof | [VALIDATION.md](VALIDATION.md) records two confirmed testnet payment hashes | Available; synthetic actors and evidence |
 | Live hosted product URL | None | Missing; do not invent one |
 | End-to-end demo video | None | Missing; record the real pilot flow or clearly label a synthetic testnet demo |
