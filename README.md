@@ -32,6 +32,10 @@ The [documentation index](product/docs/README.md), [Wave readiness record](produ
 
 [Wave application steps and six contributor issues](product/docs/WAVE.md) are documented separately. A Wave application does not make the testnet pilot ready for real sponsor funds.
 
+## Documentation
+
+Full documentation, including the API reference, role guides, security notes, and operations runbooks, is at [cjay-1.gitbook.io/lifeboat-docs](https://cjay-1.gitbook.io/lifeboat-docs/).
+
 ## Contributing and security
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for pull requests, [SECURITY.md](SECURITY.md) for private vulnerability reports, and [LICENSE](LICENSE) for MIT terms.
